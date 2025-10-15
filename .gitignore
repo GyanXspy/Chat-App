@@ -1,0 +1,7 @@
+# Ignore metadata folder
+.metadata/
+
+# Ignore build and IDE files
+/target/
+/.idea/
+/.vscode/
