@@ -1,5 +1,16 @@
-FROM amd64/openjdk:21-jdk-slim
+# Use Java 17 to match your pom.xml java.version
+FROM eclipse-temurin:17-jre-jammy
+
 WORKDIR /app
-COPY target/ chatapp-0.0.1-SNAPSHOT.jar app.jar
+
+# copy the built jar from target into the image and rename to app.jar
+# NOTE: ensure target/chatapp-0.0.1-SNAPSHOT.jar exists (build first)
+COPY target/chatapp-0.0.1-SNAPSHOT.jar app.jar
+
+# create non-root user and use it
+RUN addgroup --system spring && adduser --system --ingroup spring spring
+USER spring
+
 EXPOSE 8080
-ENTRYPOINT ["java", "-jar", "app.jar"]
+
+ENTRYPOINT ["sh", "-c", "exec java -jar /app/app.jar"]
